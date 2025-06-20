@@ -1,10 +1,7 @@
 /* AirbnbCalculator.css */
 
 .calculator-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
     padding: 16px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
   
   .calculator-wrapper {
@@ -130,9 +127,9 @@
     padding: 8px 12px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s;
   }
   
   .input-field:focus {
@@ -358,7 +355,7 @@
   /* Responsive Design */
   @media (max-width: 768px) {
     /* This rule creates the necessary space at the top of the page for the floating bar */
-    .calculator-container {
+    body {
       padding-top: 190px;
     }
 
@@ -373,7 +370,7 @@
       position: fixed;
       top: 16px;
       left: 12px;
-      width: calc(100vw - 24px);
+      right: 12px;
       box-sizing: border-box; 
       flex-direction: column;
       background-color: rgba(255, 255, 255, 0.9);
