@@ -297,6 +297,11 @@
   
   /* Responsive Design */
   @media (max-width: 768px) {
+    .calculator-container {
+      /* Create space at the top for the fixed KPI bar */
+      padding-top: 190px;
+    }
+
     .calculator-grid {
       grid-template-columns: 1fr;
       gap: 24px;
@@ -323,7 +328,9 @@
   
   @media (max-width: 480px) {
     .calculator-container {
-      padding: 8px;
+      /* On very small screens, only adjust horizontal padding. Top padding is inherited. */
+      padding-left: 8px;
+      padding-right: 8px;
     }
     
     .header-title-wrapper {
@@ -416,4 +423,109 @@
   border-style: solid;
   border-color: white transparent transparent transparent;
   filter: drop-shadow(0 1px 1px rgba(0,0,0,0.05));
+}
+
+/* Mobile KPI Bar */
+.mobile-kpi-bar {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 12px; /* Anchor the bar 12px from the left */
+  width: calc(100vw - 24px); /* Explicitly set the width to the viewport width minus the side margins */
+  
+  box-sizing: border-box; 
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  padding: 12px; 
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 10px;
+  overflow: hidden; /* A final safeguard to clip any content */
+}
+
+.kpi-row {
+  display: flex; /* Use flexbox for robust distribution */
+  width: 100%;
+  align-items: center;
+  gap: 4px; 
+}
+
+.assessment-row {
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.assessment-row .mobile-kpi-label {
+  font-size: 11px;
+  letter-spacing: 0.8px;
+}
+
+.assessment-value {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-tax-row {
+  padding-top: 12px;
+  border-top: 1px dashed #d1d5db;
+}
+
+.mobile-kpi-metric {
+  flex: 1; /* Allow items to grow and shrink equally */
+  min-width: 0; /* CRUCIAL: Allows flex items to shrink below their content size */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mobile-kpi-label {
+  font-size: 9px;
+  color: #6b7280;
+  margin-bottom: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+.mobile-kpi-value {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-all; /* Final guarantee to contain text */
+}
+
+.assessment-emoji {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.mobile-kpi-value.good, .assessment-value.good { color: #059669; }
+.assessment-value.good .assessment-emoji { background-color: #10b981; }
+
+.mobile-kpi-value.ok, .assessment-value.ok { color: #d97706; }
+.assessment-value.ok .assessment-emoji { background-color: #f59e0b; }
+
+.mobile-kpi-value.poor, .assessment-value.poor { color: #dc2626; }
+.assessment-value.poor .assessment-emoji { background-color: #ef4444; }
+
+@media (max-width: 768px) {
+  .mobile-kpi-bar {
+    display: flex;
+  }
+  .main-kpis-section, .assessment-section {
+    display: none;
+  }
 }
