@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { Calculator, DollarSign, Home, TrendingUp, AlertCircle } from 'lucide-react';
+import { Calculator, DollarSign, Home, TrendingUp, AlertCircle, Info } from 'lucide-react';
 import './AirbnbCalculator.css';
 
 const useDebounce = (value, delay) => {
@@ -18,14 +18,31 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-const InputField = React.memo(({ label, name, value, onChange, step, type = "number" }) => {
+const Tooltip = ({ text, children }) => (
+  <span className="tooltip-container">
+    {children}
+    <span className="tooltip-text">{text}</span>
+  </span>
+);
+Tooltip.displayName = 'Tooltip';
+
+const InputField = React.memo(({ label, name, value, onChange, step, type = "number", tooltipText }) => {
   const handleChange = (e) => {
     onChange(name, e.target.value);
   };
 
+  const fieldLabel = tooltipText ? (
+    <div className="label-with-tooltip">
+      <span>{label}</span>
+      <Tooltip text={tooltipText}>
+        <Info size={14} className="info-icon" />
+      </Tooltip>
+    </div>
+  ) : label;
+
   return (
     <div className="input-group">
-      <label className="input-label">{label}</label>
+      <label className="input-label">{fieldLabel}</label>
       <input
         type={type}
         name={name}
@@ -146,7 +163,8 @@ const AirbnbCalculator = () => {
     const noi = grossRevenue - (totalExpenses - annualPI);
     const cashFlow = grossRevenue - totalExpenses;
     const monthlyCashFlow = cashFlow / 12;
-    const cashOnCashReturn = downPayment > 0 ? (cashFlow / downPayment) * 100 : 0;
+    const totalCashInvested = downPayment + rehabCost;
+    const cashOnCashReturn = totalCashInvested > 0 ? (cashFlow / totalCashInvested) * 100 : 0;
     const capRate = propertyValue > 0 ? (noi / propertyValue) * 100 : 0;
 
     const annualInterest = loanAmount * (interestRate / 100);
@@ -176,7 +194,7 @@ const AirbnbCalculator = () => {
     
     const afterTaxAnnualCashFlow = cashFlow + annualTaxSavings;
     const afterTaxMonthlyCashFlow = afterTaxAnnualCashFlow / 12;
-    const afterTaxCashOnCashReturn = downPayment > 0 ? (afterTaxAnnualCashFlow / downPayment) * 100 : 0;
+    const afterTaxCashOnCashReturn = totalCashInvested > 0 ? (afterTaxAnnualCashFlow / totalCashInvested) * 100 : 0;
 
     return {
       downPayment, loanAmount, monthlyPI, annualPI, occupiedNights, grossRevenue,
@@ -359,6 +377,7 @@ const AirbnbCalculator = () => {
                   value={inputs.capexPercent}
                   onChange={updateInput}
                   step="0.1"
+                  tooltipText="Capital Expenditures: Funds set aside for major long-term upgrades like a new roof or HVAC system. Often estimated as a percentage of property value."
                 />
               </div>
             </div>
@@ -426,6 +445,7 @@ const AirbnbCalculator = () => {
                   name="marginalTaxRate"
                   value={inputs.marginalTaxRate}
                   onChange={updateInput}
+                  tooltipText="Your highest tax bracket. This is used to estimate the value of your tax deductions."
                 />
               </div>
             </div>
@@ -449,6 +469,7 @@ const AirbnbCalculator = () => {
                   name="landValuePercent"
                   value={inputs.landValuePercent}
                   onChange={updateInput}
+                  tooltipText="The percentage of the property's total value that is attributed to the land itself. Land does not depreciate and cannot be a tax write-off."
                 />
                 <InputField
                   label="Depreciation Years"
@@ -472,25 +493,45 @@ const AirbnbCalculator = () => {
               
               <div className="metrics-grid">
                 <div className="metric-card green">
-                  <div className="metric-label green">Monthly Cash Flow</div>
+                  <div className="metric-label green">
+                    Monthly Cash Flow
+                    <Tooltip text="Your estimated take-home profit each month after all expenses, including mortgage, are paid.">
+                      <Info size={14} className="info-icon" />
+                    </Tooltip>
+                  </div>
                   <div className={`metric-value ${getResultClass(calculations.monthlyCashFlow, {good: 200, ok: 0})}`}>
                     {formatCurrency(calculations.monthlyCashFlow)}
                   </div>
                 </div>
                 <div className="metric-card blue">
-                  <div className="metric-label blue">Cash-on-Cash Return</div>
+                  <div className="metric-label blue">
+                    Cash-on-Cash Return
+                    <Tooltip text="Measures the annual return on the cash invested. Calculated as (Annual Cash Flow / Total Initial Investment).">
+                      <Info size={14} className="info-icon" />
+                    </Tooltip>
+                  </div>
                   <div className={`metric-value ${getResultClass(calculations.cashOnCashReturn, {good: 8, ok: 5})}`}>
                     {formatPercent(calculations.cashOnCashReturn)}
                   </div>
                 </div>
                 <div className="metric-card purple">
-                  <div className="metric-label purple">Cap Rate</div>
+                  <div className="metric-label purple">
+                    Cap Rate
+                    <Tooltip text="Annual net operating income (NOI) divided by property value. Shows profitability without factoring in debt.">
+                      <Info size={14} className="info-icon" />
+                    </Tooltip>
+                  </div>
                   <div className={`metric-value ${getResultClass(calculations.capRate, {good: 6, ok: 4})}`}>
                     {formatPercent(calculations.capRate)}
                   </div>
                 </div>
                 <div className="metric-card orange">
-                  <div className="metric-label orange">Annual Cash Flow</div>
+                  <div className="metric-label orange">
+                    Annual Cash Flow
+                    <Tooltip text="Your estimated take-home profit for the year after all expenses are paid.">
+                      <Info size={14} className="info-icon" />
+                    </Tooltip>
+                  </div>
                   <div className={`metric-value ${getResultClass(calculations.cashFlow, {good: 2400, ok: 0})}`}>
                     {formatCurrency(calculations.cashFlow)}
                   </div>
@@ -682,7 +723,12 @@ const AirbnbCalculator = () => {
                   <span className="breakdown-value">{formatCurrency(calculations.hoaFees)}</span>
                 </li>
                 <li className="breakdown-item">
-                  <span className="breakdown-label">Depreciation (Year 1):</span>
+                  <span className="breakdown-label">
+                    Depreciation (Year 1)
+                    <Tooltip text="A tax deduction that allows you to recover the cost of the building (not land) over its useful life (typically 27.5 years for residential property).">
+                      <Info size={14} className="info-icon" />
+                    </Tooltip>
+                  </span>
                   <span className="breakdown-value">{formatCurrency(calculations.depreciation)}</span>
                 </li>
                 <hr />
