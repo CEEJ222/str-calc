@@ -41,13 +41,13 @@ InputField.displayName = 'InputField';
 
 const AirbnbCalculator = () => {
   const [inputs, setInputs] = useState({
-    propertyValue: '250000',
-    downPaymentPercent: '25',
-    interestRate: '7.12',
+    propertyValue: '300000',
+    downPaymentPercent: '20',
+    interestRate: '7.0',
     loanTermYears: '30',
     avgNightlyRate: '200',
-    occupancyRate: '51',
-    insurance: '1000',
+    occupancyRate: '65',
+    insurance: '1800',
     hoaFees: '0',
     utilities: '2400',
     maintenancePercent: '1.0',
@@ -59,7 +59,10 @@ const AirbnbCalculator = () => {
     strLicenses: '1300',
     suppliesPerNight: '15',
     internetAnnual: '600',
-    marginalTaxRate: '25'
+    marginalTaxRate: '25',
+    propertyTaxRate: '1.25',
+    landValuePercent: '20',
+    depreciationYears: '27.5'
   });
 
   const debouncedInputs = useDebounce(inputs, 500);
@@ -103,8 +106,11 @@ const AirbnbCalculator = () => {
     const suppliesPerNight = getNum(debouncedInputs.suppliesPerNight);
     const internetAnnual = getNum(debouncedInputs.internetAnnual);
     const marginalTaxRate = getNum(debouncedInputs.marginalTaxRate);
+    const propertyTaxRate = getNum(debouncedInputs.propertyTaxRate);
+    const landValuePercent = getNum(debouncedInputs.landValuePercent);
+    const depreciationYears = getNum(debouncedInputs.depreciationYears);
 
-    const propertyTaxes = propertyValue * 0.0125;
+    const propertyTaxes = propertyValue * (propertyTaxRate / 100);
 
     const downPayment = propertyValue * (downPaymentPercent / 100);
     const loanAmount = propertyValue - downPayment;
@@ -140,8 +146,8 @@ const AirbnbCalculator = () => {
     const capRate = propertyValue > 0 ? (noi / propertyValue) * 100 : 0;
 
     const annualInterest = loanAmount * (interestRate / 100);
-    const buildingValue = propertyValue * 0.8; // Assume land is 20% of value
-    const depreciation = buildingValue / 27.5; // Straight-line over 27.5 years
+    const buildingValue = propertyValue * (1 - (landValuePercent / 100));
+    const depreciation = depreciationYears > 0 ? buildingValue / depreciationYears : 0;
 
     const totalDeductions = 
         annualInterest + 
@@ -207,7 +213,7 @@ const AirbnbCalculator = () => {
 
   const resetToDefaults = () => {
     setInputs({
-      propertyValue: '250000',
+      propertyValue: '300000',
       downPaymentPercent: '20',
       interestRate: '7.0',
       loanTermYears: '30',
@@ -218,14 +224,17 @@ const AirbnbCalculator = () => {
       utilities: '2400',
       maintenancePercent: '1.0',
       capexPercent: '0.5',
-      propertyMgmtPercent: '20',
+      propertyMgmtPercent: '13',
       cleaningFeePerNight: '50',
       platformFeePercent: '3',
       transientOccupancyTaxPercent: '7',
-      strLicenses: '300',
+      strLicenses: '1300',
       suppliesPerNight: '15',
-      internetAnnual: '960',
-      marginalTaxRate: '25'
+      internetAnnual: '600',
+      marginalTaxRate: '25',
+      propertyTaxRate: '1.25',
+      landValuePercent: '20',
+      depreciationYears: '27.5'
     });
   };
 
@@ -407,6 +416,36 @@ const AirbnbCalculator = () => {
                   name="marginalTaxRate"
                   value={inputs.marginalTaxRate}
                   onChange={updateInput}
+                />
+              </div>
+            </div>
+
+            {/* Advanced Assumptions */}
+            <div className="section">
+              <div className="section-header">
+                <Calculator className="section-icon gray" />
+                Advanced Assumptions
+              </div>
+              <div className="grid-2">
+                <InputField
+                  label="Property Tax Rate %"
+                  name="propertyTaxRate"
+                  value={inputs.propertyTaxRate}
+                  onChange={updateInput}
+                  step="0.01"
+                />
+                <InputField
+                  label="Land Value % of Total"
+                  name="landValuePercent"
+                  value={inputs.landValuePercent}
+                  onChange={updateInput}
+                />
+                <InputField
+                  label="Depreciation Years"
+                  name="depreciationYears"
+                  value={inputs.depreciationYears}
+                  onChange={updateInput}
+                  step="0.5"
                 />
               </div>
             </div>
@@ -631,11 +670,16 @@ const AirbnbCalculator = () => {
                 </li>
               </ul>
               <p className="disclaimer">
-                Estimates assume 80% of property value is depreciable over 27.5 years and all expenses are deductible. Consult a tax professional.
+                Estimates assume all expenses are deductible. The depreciation schedule is typically 27.5 years for residential real estate in the US. Consult a tax professional.
               </p>
             </div>
           </div>
         </div>
+        <footer className="footer">
+          <p>
+            <strong>Disclaimer:</strong> This calculator is for informational and educational purposes only and should not be considered financial or legal advice. The results are estimates based on the inputs you provide. All financial investments carry risks. You should consult with a qualified financial advisor, real estate professional, and tax consultant before making any investment decisions.
+          </p>
+        </footer>
       </div>
     </div>
   );

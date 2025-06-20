@@ -323,3 +323,26 @@
       font-size: 1.75rem;
     }
   }
+
+.disclaimer {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 1rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.footer {
+  max-width: 48rem;
+  margin: 2rem auto 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.footer strong {
+  font-weight: 600;
+  color: #1f2937;
+}
