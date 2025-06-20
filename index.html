@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Analytics - Only in Production -->
+    <script>
+      if (import.meta.env.PROD) {
+        const script = document.createElement('script');
+        script.defer = true;
+        script.src = 'https://cloud.umami.is/script.js';
+        script.setAttribute('data-website-id', 'ede7ae92-268f-402c-bddb-e2bbfdc56a28');
+        document.head.appendChild(script);
+      }
+    </script>
+    
     <!-- Favicon Configuration -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
