@@ -52,6 +52,7 @@ const AirbnbCalculator = () => {
     utilities: '2400',
     maintenancePercent: '1.0',
     capexPercent: '0.5',
+    rehabCost: '0',
     propertyMgmtPercent: '13',
     cleaningFeePerNight: '50',
     platformFeePercent: '3',
@@ -98,6 +99,7 @@ const AirbnbCalculator = () => {
     const utilities = getNum(debouncedInputs.utilities);
     const maintenancePercent = getNum(debouncedInputs.maintenancePercent);
     const capexPercent = getNum(debouncedInputs.capexPercent);
+    const rehabCost = getNum(debouncedInputs.rehabCost);
     const propertyMgmtPercent = getNum(debouncedInputs.propertyMgmtPercent);
     const cleaningFeePerNight = getNum(debouncedInputs.cleaningFeePerNight);
     const platformFeePercent = getNum(debouncedInputs.platformFeePercent);
@@ -135,8 +137,10 @@ const AirbnbCalculator = () => {
     const transientOccupancyTax = grossRevenue * (transientOccupancyTaxPercent / 100);
     const supplies = occupiedNights * suppliesPerNight;
 
+    const otherOperatingExpenses = utilities + maintenance + capex + rehabCost + strLicenses + supplies + internetAnnual;
+
     const totalExpenses = annualPI + propertyTaxes + insurance + hoaFees + utilities + 
-                         maintenance + capex + propertyMgmt + cleaningFees + platformFees + 
+                         maintenance + capex + rehabCost + propertyMgmt + cleaningFees + platformFees + 
                          transientOccupancyTax + strLicenses + supplies + internetAnnual;
 
     const noi = grossRevenue - (totalExpenses - annualPI);
@@ -157,6 +161,7 @@ const AirbnbCalculator = () => {
         utilities + 
         maintenance + 
         capex + 
+        rehabCost + 
         propertyMgmt + 
         cleaningFees + 
         platformFees + 
@@ -169,15 +174,13 @@ const AirbnbCalculator = () => {
     const annualTaxSavings = totalDeductions * (marginalTaxRate / 100);
     const propertyTaxSavings = propertyTaxes * (marginalTaxRate / 100);
     
-    const otherOperatingExpenses = utilities + maintenance + capex + strLicenses + supplies + internetAnnual;
-
     const afterTaxAnnualCashFlow = cashFlow + annualTaxSavings;
     const afterTaxMonthlyCashFlow = afterTaxAnnualCashFlow / 12;
     const afterTaxCashOnCashReturn = downPayment > 0 ? (afterTaxAnnualCashFlow / downPayment) * 100 : 0;
 
     return {
       downPayment, loanAmount, monthlyPI, annualPI, occupiedNights, grossRevenue,
-      maintenance, capex, propertyMgmt, cleaningFees, platformFees, supplies,
+      maintenance, capex, rehabCost, propertyMgmt, cleaningFees, platformFees, supplies,
       totalExpenses, noi, cashFlow, monthlyCashFlow, cashOnCashReturn, capRate,
       propertyTaxes, insurance, otherOperatingExpenses, annualTaxSavings, propertyTaxSavings, annualInterest,
       transientOccupancyTax, afterTaxAnnualCashFlow, afterTaxMonthlyCashFlow, afterTaxCashOnCashReturn,
@@ -224,6 +227,7 @@ const AirbnbCalculator = () => {
       utilities: '2400',
       maintenancePercent: '1.0',
       capexPercent: '0.5',
+      rehabCost: '0',
       propertyMgmtPercent: '13',
       cleaningFeePerNight: '50',
       platformFeePercent: '3',
@@ -287,6 +291,12 @@ const AirbnbCalculator = () => {
                   label="Loan Term (Years)"
                   name="loanTermYears"
                   value={inputs.loanTermYears}
+                  onChange={updateInput}
+                />
+                <InputField
+                  label="Rehab/Improvement Cost"
+                  name="rehabCost"
+                  value={inputs.rehabCost}
                   onChange={updateInput}
                 />
               </div>
@@ -574,6 +584,10 @@ const AirbnbCalculator = () => {
                   <span className="breakdown-value">{formatCurrency(calculations.insurance)}</span>
                 </li>
                 <li className="breakdown-item">
+                  <span className="breakdown-label">Rehab/Improvement:</span>
+                  <span className="breakdown-value">{formatCurrency(calculations.rehabCost)}</span>
+                </li>
+                <li className="breakdown-item">
                   <span className="breakdown-label">Property Management:</span>
                   <span className="breakdown-value">{formatCurrency(calculations.propertyMgmt)}</span>
                 </li>
@@ -616,6 +630,14 @@ const AirbnbCalculator = () => {
                   <span className="breakdown-label">Monthly P&I Payment:</span>
                   <span className="breakdown-value">{formatCurrency(calculations.monthlyPI)}</span>
                 </li>
+                <li className="breakdown-item">
+                  <span className="breakdown-label">Rehab/Improvement Cost:</span>
+                  <span className="breakdown-value">{formatCurrency(calculations.rehabCost)}</span>
+                </li>
+                <li className="breakdown-item total">
+                  <span className="breakdown-label">Total Initial Investment:</span>
+                  <span className="breakdown-value">{formatCurrency(calculations.downPayment + calculations.rehabCost)}</span>
+                </li>
               </ul>
             </div>
 
@@ -634,6 +656,10 @@ const AirbnbCalculator = () => {
                 <li className="breakdown-item">
                   <span className="breakdown-label">Insurance:</span>
                   <span className="breakdown-value">{formatCurrency(calculations.insurance)}</span>
+                </li>
+                <li className="breakdown-item">
+                  <span className="breakdown-label">Rehab/Improvement:</span>
+                  <span className="breakdown-value">{formatCurrency(calculations.rehabCost)}</span>
                 </li>
                 <li className="breakdown-item">
                   <span className="breakdown-label">Property Management:</span>
