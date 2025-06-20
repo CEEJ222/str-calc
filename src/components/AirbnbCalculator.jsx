@@ -295,8 +295,8 @@ const AirbnbCalculator = () => {
     };
   }, [debouncedInputs]);
 
-  const updateInput = useCallback((key, value) => {
-    setInputs(prev => ({ ...prev, [key]: value }));
+  const handleInputChange = useCallback((name, value) => {
+    setInputs(prev => ({ ...prev, [name]: value }));
   }, []);
 
   const formatCurrency = (amount) => {
@@ -306,13 +306,14 @@ const AirbnbCalculator = () => {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(num);
   };
 
   const formatPercent = (percent) => {
-    if (isNaN(percent) || percent === null || percent === undefined) return '0.0%';
-    return `${percent.toFixed(1)}%`;
+    const num = parseFloat(percent);
+    if (isNaN(num)) return '0.0%';
+    return `${num.toFixed(1)}%`;
   };
 
   const getResultClass = (value, thresholds) => {
@@ -386,32 +387,32 @@ const AirbnbCalculator = () => {
                     label="Property Value"
                     name="propertyValue"
                     value={inputs.propertyValue}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Down Payment %"
                     name="downPaymentPercent"
                     value={inputs.downPaymentPercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Interest Rate %"
                     name="interestRate"
                     value={inputs.interestRate}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.1"
                   />
                   <InputField
                     label="Loan Term (Years)"
                     name="loanTermYears"
                     value={inputs.loanTermYears}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Rehab/Improvement Cost"
                     name="rehabCost"
                     value={inputs.rehabCost}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -427,13 +428,13 @@ const AirbnbCalculator = () => {
                     label="Avg Nightly Rate"
                     name="avgNightlyRate"
                     value={inputs.avgNightlyRate}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Occupancy Rate %"
                     name="occupancyRate"
                     value={inputs.occupancyRate}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -446,32 +447,32 @@ const AirbnbCalculator = () => {
                     label="Insurance"
                     name="insurance"
                     value={inputs.insurance}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="HOA/Condo Fees"
                     name="hoaFees"
                     value={inputs.hoaFees}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Utilities"
                     name="utilities"
                     value={inputs.utilities}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Maintenance % of Value"
                     name="maintenancePercent"
                     value={inputs.maintenancePercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.1"
                   />
                   <InputField
                     label="CapEx % of Value"
                     name="capexPercent"
                     value={inputs.capexPercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.1"
                     tooltipText="Capital Expenditures: Funds set aside for major long-term upgrades like a new roof or HVAC system. Often estimated as a percentage of property value."
                   />
@@ -486,45 +487,45 @@ const AirbnbCalculator = () => {
                     label="Property Mgmt % of Revenue"
                     name="propertyMgmtPercent"
                     value={inputs.propertyMgmtPercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Cleaning Fee per Night"
                     name="cleaningFeePerNight"
                     value={inputs.cleaningFeePerNight}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Platform Fee % of Revenue"
                     name="platformFeePercent"
                     value={inputs.platformFeePercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.1"
                   />
                   <InputField
                     label="Transient Occupancy Tax %"
                     name="transientOccupancyTaxPercent"
                     value={inputs.transientOccupancyTaxPercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.1"
                   />
                   <InputField
                     label="Licenses/Permits (Annual)"
                     name="strLicenses"
                     value={inputs.strLicenses}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Supplies per Night"
                     name="suppliesPerNight"
                     value={inputs.suppliesPerNight}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Internet (Annual)"
                     name="internetAnnual"
                     value={inputs.internetAnnual}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -540,7 +541,7 @@ const AirbnbCalculator = () => {
                     label="Marginal Tax Rate %"
                     name="marginalTaxRate"
                     value={inputs.marginalTaxRate}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     tooltipText="Your highest tax bracket. This is used to estimate the value of your tax deductions."
                   />
                 </div>
@@ -557,21 +558,21 @@ const AirbnbCalculator = () => {
                     label="Property Tax Rate %"
                     name="propertyTaxRate"
                     value={inputs.propertyTaxRate}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.01"
                   />
                   <InputField
                     label="Land Value % of Total"
                     name="landValuePercent"
                     value={inputs.landValuePercent}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     tooltipText="The percentage of the property's total value that is attributed to the land itself. Land does not depreciate and cannot be a tax write-off."
                   />
                   <InputField
                     label="Depreciation Years"
                     name="depreciationYears"
                     value={inputs.depreciationYears}
-                    onChange={updateInput}
+                    onChange={handleInputChange}
                     step="0.5"
                   />
                 </div>
