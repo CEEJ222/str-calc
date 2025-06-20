@@ -1,0 +1,325 @@
+/* AirbnbCalculator.css */
+
+.calculator-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+    padding: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  .calculator-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  
+  .calculator-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .header-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .header-icon {
+    width: 32px;
+    height: 32px;
+    color: #2563eb;
+  }
+  
+  .header-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin: 0;
+  }
+  
+  .header-subtitle {
+    color: #6b7280;
+    font-size: 1.125rem;
+    margin: 0 0 16px 0;
+  }
+  
+  .reset-button {
+    padding: 8px 16px;
+    background-color: #6b7280;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 14px;
+  }
+  
+  .reset-button:hover {
+    background-color: #4b5563;
+  }
+  
+  .calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 32px;
+  }
+  
+  .input-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .results-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .section {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
+  
+  .section-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .section-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .section-icon.blue {
+    color: #2563eb;
+  }
+  
+  .section-icon.green {
+    color: #059669;
+  }
+  
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .input-group {
+    margin-bottom: 16px;
+  }
+  
+  .input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 4px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .input-field:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .metric-card {
+    padding: 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+  }
+  
+  .metric-card.green {
+    --gradient-from: #ecfdf5;
+    --gradient-to: #d1fae5;
+  }
+  
+  .metric-card.blue {
+    --gradient-from: #eff6ff;
+    --gradient-to: #dbeafe;
+  }
+  
+  .metric-card.purple {
+    --gradient-from: #faf5ff;
+    --gradient-to: #e9d5ff;
+  }
+  
+  .metric-card.orange {
+    --gradient-from: #fffbeb;
+    --gradient-to: #fed7aa;
+  }
+  
+  .metric-label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  
+  .metric-label.green {
+    color: #059669;
+  }
+  
+  .metric-label.blue {
+    color: #2563eb;
+  }
+  
+  .metric-label.purple {
+    color: #7c3aed;
+  }
+  
+  .metric-label.orange {
+    color: #ea580c;
+  }
+  
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .metric-value.good {
+    color: #059669;
+  }
+  
+  .metric-value.ok {
+    color: #d97706;
+  }
+  
+  .metric-value.poor {
+    color: #dc2626;
+  }
+  
+  .assessment-section {
+    background-color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+  .assessment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .assessment-header .icon {
+    width: 16px;
+    height: 16px;
+    color: #6b7280;
+  }
+  
+  .assessment-title {
+    font-weight: 500;
+    color: #374151;
+    margin: 0;
+  }
+  
+  .assessment-text {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+  }
+  
+  .breakdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  
+  .breakdown-item:last-child {
+    border-bottom: none;
+    border-top: 1px solid #d1d5db;
+    padding-top: 12px;
+    font-weight: 600;
+  }
+  
+  .breakdown-label {
+    color: #6b7280;
+  }
+  
+  .breakdown-value {
+    font-weight: 500;
+  }
+  
+  .breakdown-value.positive {
+    color: #059669;
+  }
+  
+  .breakdown-value.negative {
+    color: #dc2626;
+  }
+  
+  .breakdown-value.total {
+    color: #dc2626;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .calculator-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    
+    .grid-2 {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    
+    .metrics-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    
+    .header-title {
+      font-size: 2rem;
+    }
+    
+    .section {
+      padding: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .calculator-container {
+      padding: 8px;
+    }
+    
+    .header-title-wrapper {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .header-title {
+      font-size: 1.75rem;
+    }
+  }
